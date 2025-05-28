@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+}
+
+#glCanvas {
+    display: block;
+    width: 800px;
+    height: 800px;
+    margin: 0 auto;
+}
