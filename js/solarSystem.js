@@ -2,33 +2,12 @@ class SolarSystem {
     constructor(scene) {
         this.scene = scene;
         this.planets = [];
-        this.star = null;
-        this.simulationSpeed = 1;
-    }
-
-    createDefaultSystem() {
-        this.star = new Star(this.scene, 10, 0xffff00);
-
-        this.addPlanet(5, 0xff0000, 20, 0.5);
-        this.addPlanet(3, 0x00ff00, 35, 0.3);
-        this.addPlanet(4, 0x0000ff, 50, 0.7);
-        this.addPlanet(6, 0xffa500, 70, 0.2);
-        this.addPlanet(2, 0xffffff, 90, 0.4);
-    }
-
-    addPlanet(size, color, orbitRadius, orbitSpeed) {
-        const planet = new Planet(this.scene, size, color, orbitRadius, orbitSpeed);
-        this.planets.push(planet);
-        return planet;
-    }
-
-    update() {
-        this.planets.forEach(planet => {
-            planet.update(this.simulationSpeed);
-        });
         this.speedMultiplier = 1;
+        this.degreesPerSecond = 10;
+        this.paused = false;
 
         this.createSystem();
+        this.createUI();
     }
 
     createSystem() {
@@ -44,9 +23,73 @@ class SolarSystem {
     addPlanet(texturePath, size, orbitRadius, speed) {
         const planet = new Planet(this.scene, texturePath, size, orbitRadius, speed);
         this.planets.push(planet);
+        return planet;
     }
 
     update() {
-        this.planets.forEach(planet => planet.update(this.speedMultiplier));
+        if (this.paused) return;
+
+        const speed = THREE.MathUtils.degToRad(this.degreesPerSecond * this.speedMultiplier) / 60;
+
+        this.planets.forEach(planet => {
+            planet.angle += planet.speed * speed;
+            const a = planet.orbitRadius;
+            const b = a * 0.7;
+            planet.group.position.x = Math.cos(planet.angle) * a * 0.8;
+            planet.group.position.z = Math.sin(planet.angle) * b;
+
+            planet.mesh.rotation.y += 0.005 * this.speedMultiplier;
+        });
+    }
+
+    createUI() {
+        this.uiContainer = document.createElement('div');
+        this.uiContainer.style.position = 'absolute';
+        this.uiContainer.style.top = '10px';
+        this.uiContainer.style.left = '10px';
+        this.uiContainer.style.color = 'white';
+        this.uiContainer.style.fontFamily = 'Arial, sans-serif';
+        this.uiContainer.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        this.uiContainer.style.padding = '10px';
+        this.uiContainer.style.borderRadius = '5px';
+        document.body.appendChild(this.uiContainer);
+
+        const speedControlHTML = `
+            <div style="margin-bottom: 10px;">
+                <label style="display: block; margin-bottom: 5px;">Velocidade: <span id="speedValue">${this.degreesPerSecond}º/s</span></label>
+                <input type="range" id="speedControl" min="0" max="360" value="${this.degreesPerSecond}"
+                       style="width: 200px;">
+            </div>
+            <div>
+                <button id="pauseBtn" style="margin-right: 10px;">Pausar</button>
+                <button id="resetBtn">Resetar</button>
+            </div>
+        `;
+        this.uiContainer.innerHTML = speedControlHTML;
+
+        // Event listeners
+        document.getElementById('speedControl').addEventListener('input', (e) => {
+            this.degreesPerSecond = parseInt(e.target.value);
+            document.getElementById('speedValue').textContent = `${this.degreesPerSecond}º/s`;
+        });
+
+        document.getElementById('pauseBtn').addEventListener('click', () => {
+            this.paused = !this.paused;
+            document.getElementById('pauseBtn').textContent = this.paused ? 'Continuar' : 'Pausar';
+        });
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            this.degreesPerSecond = 10;
+            document.getElementById('speedControl').value = '10';
+            document.getElementById('speedValue').textContent = '10º/s';
+            this.paused = false;
+            document.getElementById('pauseBtn').textContent = 'Pausar';
+        });
+    }
+
+    cleanup() {
+        if (this.uiContainer && document.body.contains(this.uiContainer)) {
+            document.body.removeChild(this.uiContainer);
+        }
     }
 }

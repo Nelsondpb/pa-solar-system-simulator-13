@@ -9,12 +9,18 @@ body {
     width: 800px;
     height: 800px;
     margin: 0 auto;
+
 }
 
-#ui-controls {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-family: Arial, sans-serif;
+#speedControl {
+    width: 200px;
+    margin: 0 10px;
+}
+
+#uiContainer {
+    user-select: none;
+}
+
+#uiContainer label {
+    font-size: 14px;
 }
