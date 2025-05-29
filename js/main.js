@@ -12,6 +12,7 @@ class SolarSystemSimulator {
 
         this.camera = new THREE.PerspectiveCamera(75, 800 / 800, 0.1, 1000);
         this.camera.position.set(0, 50, 100);
+        this.camera.position.set(0, 30, 100);
         this.camera.lookAt(0, 0, 0);
 
         this.renderer = new THREE.WebGLRenderer({
