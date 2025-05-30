@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+  Solar System Simulator - Main Entry Point
+  =========================================
+
+  Interactive 3D simulation of a solar system using Three.js.
+  Features:
+  - Central star with dynamic lighting
+  - Planets with orbital mechanics and textures
+  - Moons orbiting planets
+  - Comets with particle tails
+  - 3D models (asteroids, satellites, spaceships)
+  - Multiple camera control modes (orbit & first-person)
+  - Real-time parameter adjustments
+
+  Required Libraries:
+  - Three.js (core)
+  - OrbitControls
+  - GLTFLoader
+  - PointerLockControls (custom implementation)
+
+  Project Structure:
+  - All simulation logic in /js directory
+  - Textures in /textures directory
+  - 3D models in /models directory
+  - CSS styles in /css directory
+-->
+<html lang="pt">
+<head>
+  <!-- Meta Configuration -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simulação 3D interativa de um sistema solar">
+  <title>Sistema Solar</title>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Three.js Core and Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/PointerLockControls.js"></script>
+</head>
+<body>
+<!-- WebGL Canvas Container -->
+<canvas id="glCanvas"></canvas>
+
+<!-- Loading Indicator -->
+<div id="loader" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white;">
+  Carregando...
+</div>
+
+<!--
+    Application Scripts
+    Load Order:
+    1. Core components (models, celestial bodies)
+    2. Solar system manager
+    3. Main application controller
+    4. Specialized controls
+-->
+<script src="js/model3D.js"></script>  <!-- 3D Model Loader -->
+<script src="js/star.js"></script>  <!-- Star Implementation -->
+<script src="js/planet.js"></script>  <!-- Planet Implementation -->
+<script src="js/solarSystem.js"></script>  <!-- Solar System Manager -->
+<script src="js/main.js"></script>  <!-- Main Application Controller -->
+<script src="js/PointerLockControls.js"></script>  <!-- Custom FPS Controls -->
+<script src="js/moon.js"></script>  <!-- Moon Implementation -->
+<script src="js/comet.js"></script>  <!-- Comet Implementation -->
+</body>
+</html>
